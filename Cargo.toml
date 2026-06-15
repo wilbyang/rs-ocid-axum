@@ -2,16 +2,20 @@
 name = "rs-ocid-axum"
 version = "0.1.0"
 edition = "2024"
-
+description = "An Axum router builder for OpenID Connect login flows."
+readme = "README.md"
+license = "MIT"
+documentation = "https://docs.rs/rs-ocid-axum"
+keywords = ["axum", "oidc", "openid-connect", "oauth2"]
+categories = ["web-programming", "authentication"]
+rust-version = "1.85"
 
 [dependencies]
-axum = "0.7"
-tower = "0.4"
-openidconnect = { version = "3.4", features = ["reqwest"] }
-reqwest = { version = "0.11", features = ["rustls-tls"] }
-tokio = { version = "1", features = ["full"] }
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-dashmap = "5" # 用于并发安全的 State/PKCE 存储
-async-trait = "0.1"
-thiserror = "1"
+axum = "0.8.9"
+openidconnect = { version = "4.0.1", features = ["reqwest"] }
+tokio = { version = "1.52.3", features = ["full"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.150"
+dashmap = "5.5.3"
+async-trait = "0.1.89"
+thiserror = "2.0.18"
