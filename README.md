@@ -82,6 +82,12 @@ let app = Router::new()
 
 The example above matches the current crate implementation and the dependency baseline listed above, including `axum 0.8.x` and `openidconnect 4.x`.
 
+You can also run the example application from `examples/google.rs`:
+
+```bash
+cargo run --example google
+```
+
 ## Development checks
 
 ```bash

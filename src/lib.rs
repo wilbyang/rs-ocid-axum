@@ -1,5 +1,3 @@
-mod oidc_wrapper;
+mod oidc;
 
-pub use oidc_wrapper::{
-    OidcBuilder, OidcCallback, OidcConfig, OidcError, OidcRouter, OidcTokenSet,
-};
+pub use oidc::{OidcBuilder, OidcCallback, OidcConfig, OidcError, OidcRouter, OidcTokenSet};

@@ -1,16 +1,16 @@
 use async_trait::async_trait;
 use axum::{
+    Router,
     extract::{Query, State},
     response::{IntoResponse, Redirect, Response},
     routing::get,
-    Router,
 };
 use dashmap::DashMap;
 use openidconnect::core::{CoreAuthenticationFlow, CoreClient, CoreProviderMetadata};
 use openidconnect::{
-    AuthorizationCode, ClientId, ClientSecret, CsrfToken, IssuerUrl, Nonce,
-    OAuth2TokenResponse, PkceCodeChallenge, PkceCodeVerifier, RedirectUrl, Scope,
-    EndpointMaybeSet, EndpointNotSet, EndpointSet,
+    AuthorizationCode, ClientId, ClientSecret, CsrfToken, EndpointMaybeSet, EndpointNotSet,
+    EndpointSet, IssuerUrl, Nonce, OAuth2TokenResponse, PkceCodeChallenge, PkceCodeVerifier,
+    RedirectUrl, Scope,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -137,15 +137,30 @@ async fn callback_handler<C: OidcCallback>(
 
     let code = match query.code {
         Some(code) => AuthorizationCode::new(code),
-        None => return state.callback_handler.on_error(OidcError::MissingCode).await,
+        None => {
+            return state
+                .callback_handler
+                .on_error(OidcError::MissingCode)
+                .await;
+        }
     };
     let state_token = match query.state {
         Some(state_token) => state_token,
-        None => return state.callback_handler.on_error(OidcError::InvalidState).await,
+        None => {
+            return state
+                .callback_handler
+                .on_error(OidcError::InvalidState)
+                .await;
+        }
     };
     let (_, auth_session) = match state.sessions.remove(&state_token) {
         Some(session) => session,
-        None => return state.callback_handler.on_error(OidcError::InvalidState).await,
+        None => {
+            return state
+                .callback_handler
+                .on_error(OidcError::InvalidState)
+                .await;
+        }
     };
 
     let token_response = match state
@@ -217,12 +232,9 @@ impl<C: OidcCallback> OidcBuilder<C> {
             .build()
             .map_err(|error| OidcError::Discovery(error.to_string()))?;
 
-        let provider_metadata = CoreProviderMetadata::discover_async(
-            issuer_url,
-            &http_client,
-        )
-        .await
-        .map_err(|error| OidcError::Discovery(error.to_string()))?;
+        let provider_metadata = CoreProviderMetadata::discover_async(issuer_url, &http_client)
+            .await
+            .map_err(|error| OidcError::Discovery(error.to_string()))?;
 
         let client = CoreClient::from_provider_metadata(
             provider_metadata,

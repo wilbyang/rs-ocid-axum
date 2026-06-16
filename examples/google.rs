@@ -1,8 +1,8 @@
 use axum::{
+    Json, Router,
     http::StatusCode,
     response::{IntoResponse, Response},
     routing::get,
-    Json, Router,
 };
 use serde_json::json;
 use tokio::net::TcpListener;
@@ -30,7 +30,11 @@ async fn main() {
         client_id: "your-client-id".to_string(),
         client_secret: "your-client-secret".to_string(),
         redirect_url: "http://localhost:3000/auth/callback".to_string(),
-        scopes: vec!["openid".to_string(), "profile".to_string(), "email".to_string()],
+        scopes: vec![
+            "openid".to_string(),
+            "profile".to_string(),
+            "email".to_string(),
+        ],
         login_path: "/auth/login".to_string(),
         callback_path: "/auth/callback".to_string(),
     };
